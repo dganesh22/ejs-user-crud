@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+     <nav class="navbar navbar-expand-md navbar-dark bg-secondary">
+        <div class="container">
+            <a href="/" class="navbar-brand">CRUD_EJS</a>
+
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/user/add" class="nav-link">Create</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+     </nav>
+
+     <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3 class="display-3 text-secondary">Create</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <form autocomplete="off" onsubmit="submitHandler(event)">
+                                    <div class="form-group mt-2">
+                                        <label for="name">Name</label>
+                                        <input type="text" name="name" id="name" class="form-control" required>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="email">Email</label>
+                                        <input type="email" name="email" id="email" class="form-control" required>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="mobile">Mobile</label>
+                                        <input type="number" name="mobile" id="mobile" class="form-control" required>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="gender">Gender</label>
+                                        <br>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="gender" id="gender" value="male" class="form-check-input" required>
+                                            <label for="gender" class="form-check-label">Male</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="gender" id="gender" value="female" class="form-check-input" required>
+                                            <label for="gender" class="form-check-label">FeMale</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="gender" id="gender" value="transgender" class="form-check-input" required>
+                                            <label for="gender" class="form-check-label">Transgender</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="qualification">Qualification</label>
+                                        <input type="text" name="qualification" id="qualification" class="form-control" required>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="address">Address</label>
+                                        <textarea name="address" id="address" cols="30" rows="5" class="form-control" required></textarea>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input type="submit" value="Add User" class="btn btn-success">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+   
+            </div>
+        </div>
+     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script>
+                
+        const fname = document.getElementById("name");
+        const femail = document.getElementById("email");
+        const fmobile = document.getElementById("mobile");
+        const fgender = document.getElementsByName("gender");
+        const fqualification = document.getElementById("qualification");
+        const faddress = document.getElementById("address");
+
+
+
+        function submitHandler(e) {
+            e.preventDefault();
+            let genValue;
+
+                for(let i=0;i< fgender.length; i++) {
+                    if(fgender[i].checked) {
+                        genValue = fgender[i].value;
+                    }
+                }
+        const newUser = {
+                name : fname.value,
+                email: femail.value,
+                mobile: fmobile.value,
+                gender: genValue,
+                qualification: fqualification.value,
+                address: faddress.value
+            };
+
+            console.log('new user =', newUser);
+
+            fetch(`http://localhost:4250/api/user/new`, {
+                method: "POST",
+                headers: { "Content-Type": "Application/json"},
+                body: JSON.stringify(newUser)
+            }).then(res => res.json())
+             .then(res => {
+                 window.alert(res.msg)
+                 window.location.href = "/";
+             }).catch(err => window.alert(err.message));
+        }
+    </script>
+</body>
+</html>
